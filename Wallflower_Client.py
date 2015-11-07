@@ -309,6 +309,6 @@ class sendmessage(threading.Thread):
             cryptic, startpointx = encrypt(self.username + ' : ' + message, startpoint)
             requests.get("http://198.100.155.138:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len(message)))
 
-id = int(raw_input("Desired Channel [Number] - [Only Use One Channel Per Pad]: "))
+id = abs(int(hash(str(pad))))  # Hashes the Pad to connect to the channel for it on the server
 getmessage(id).start()
 sendmessage(id).start()
