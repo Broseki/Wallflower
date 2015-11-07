@@ -2,6 +2,7 @@ import pickle
 import requests
 import time
 import threading
+import hashlib
 message = ''
 startpoint = 0
 endpoint = 0
@@ -15,6 +16,14 @@ pad = open("crypto.pad", 'r')
 pad = pickle.load(pad)
 print('[System] - Loaded...')
 username = str(raw_input("Desired Username: "))
+
+
+def md5(fname):
+    hash = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash.update(chunk)
+    return hash.hexdigest()
 
 
 def encrypt(message, startpoint):
@@ -304,11 +313,10 @@ class sendmessage(threading.Thread):
         while True:
             message = str(raw_input('Message: \n'))
             r = requests.get('http://198.100.155.138:5000/read/nextpoint/' + str(id))
-            print(r.text)
             startpoint = int(r.text)
             cryptic, startpointx = encrypt(self.username + ' : ' + message, startpoint)
             requests.get("http://198.100.155.138:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len(message)))
 
-id = abs(int(hash(str(pad))))  # Hashes the Pad to connect to the channel for it on the server
+id = abs(int(hash(md5('crypto.pad'))))  # Hashes the Pad to connect to the channel for it on the server
 getmessage(id).start()
 sendmessage(id).start()
