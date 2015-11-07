@@ -271,6 +271,7 @@ class getmessage(threading.Thread):
 
     def run(self):
         messagecheck = ''
+        flag = 0
         while True:
             time.sleep(1)
             r = requests.get('http://198.100.155.138:5000/read/startpoint/' + str(id))
@@ -278,6 +279,13 @@ class getmessage(threading.Thread):
             r = requests.get('http://198.100.155.138:5000/read/message/' + str(id))
             cryptic = str(r.text)
             if (cryptic != messagecheck):
+                if (flag >= 5):
+                    r = requests.get('http://198.100.155.138:5000/read/nextpoint/' + str(id))
+                    nextpoint = int(r.text)
+                    print('[System] - ' + str(float((len(pad) - nextpoint - 1))/float(len(pad))) + "% of Pad Used")
+                    flag = 0
+                else:
+                    flag = flag + 1
                 message, trash = decrypt(cryptic, startpoint)
                 print "[Channel] - " + message
                 messagecheck = cryptic
