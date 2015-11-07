@@ -273,9 +273,9 @@ class getmessage(threading.Thread):
         messagecheck = ''
         while True:
             time.sleep(1)
-            r = requests.get('http://198.100.155.138:5000/read/startpoint/' + str(id))
+            r = requests.get('http://127.0.0.1:5000/read/startpoint/' + str(id))
             startpoint = int(r.text)
-            r = requests.get('http://198.100.155.138:5000/read/message/' + str(id))
+            r = requests.get('http://127.0.0.1:5000/read/message/' + str(id))
             cryptic = str(r.text)
             if (cryptic != messagecheck):
                 message, trash = decrypt(cryptic, startpoint)
@@ -286,20 +286,21 @@ class sendmessage(threading.Thread):
     def __init__(self, id):
         self.username = username
         self.id = id
-        r = requests.get('http://198.100.155.138:5000/read/nextpoint/' + str(id))
+        r = requests.get('http://127.0.0.1:5000/read/nextpoint/' + str(id))
         startpoint = int(r.text)
         print('[System] - You are chatting securely on channel: [' + str(id) + ']')
         cryptic, startpointx = encrypt(self.username + " Has Joined!", startpoint)
-        requests.get("http://198.100.155.138:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len('A User Has Joined')))
+        requests.get("http://127.0.0.1:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len('A User Has Joined')))
         threading.Thread.__init__(self)
     def run(self):
         while True:
             message = str(raw_input('Message: \n'))
-            r = requests.get('http://198.100.155.138:5000/read/nextpoint/' + str(id))
+            r = requests.get('http://127.0.0.1:5000/read/nextpoint/' + str(id))
+            print(r.text)
             startpoint = int(r.text)
             cryptic, startpointx = encrypt(self.username + ' : ' + message, startpoint)
-            requests.get("http://198.100.155.138:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len(message)))
+            requests.get("http://127.0.0.1:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len(message)))
 
-id = int(raw_input("Desired Channel [Number]: "))
+id = int(raw_input("Desired Channel [Number] - [Only Use One Channel Per Pad]: "))
 getmessage(id).start()
 sendmessage(id).start()
