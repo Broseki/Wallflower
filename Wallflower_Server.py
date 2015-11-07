@@ -50,4 +50,4 @@ def get_nextpoint(idx):
     loadpoint(idx)
     return str(nextpoint[idx])
 
-app.run()
+app.run(host="0.0.0.0")
