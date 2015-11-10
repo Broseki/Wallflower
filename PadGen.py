@@ -1,4 +1,7 @@
-import os
+'''
+This is a cryptographically secure random number generator that uses the urandom to generate values for a one-time pad.
+A pad must be generated before a client can connect to the server.
+'''
 import crpyto_random
 import pickle
 

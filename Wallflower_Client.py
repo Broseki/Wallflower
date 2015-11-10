@@ -1,3 +1,7 @@
+'''
+This is the chat client wallflower; it connects currently to a server hosted by CaveFox Telecommunications; but that
+can be changed to any server hosting the Wallflower_Server.py software package.
+'''
 import pickle
 import requests
 import time
@@ -12,13 +16,13 @@ print('(c)2015 Michael Canning - CaveFox Telecommunications')
 print('----------------------------------------------------')
 print('All text is converted to lowercase, only letters and : are supported')
 print('[System] - Loading One-Time Pad...')
-pad = open("crypto.pad", 'r')
+pad = open("crypto.pad", 'r')  # Loads the one time pad
 pad = pickle.load(pad)
 print('[System] - Loaded...')
 username = str(raw_input("Desired Username: "))
 
 
-def md5(fname):
+def md5(fname):  # This is used to get a had of the pad
     hash = hashlib.md5()
     with open(fname, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
@@ -26,7 +30,7 @@ def md5(fname):
     return hash.hexdigest()
 
 
-def encrypt(message, startpoint):
+def encrypt(message, startpoint):  # Encrypts the message
     encoded = []
     for x in message.lower():
         if x is 'a':
@@ -150,7 +154,7 @@ def encrypt(message, startpoint):
 
     return final, startpoint
 
-def decrypt(message, startpoint):
+def decrypt(message, startpoint):  # Decrypts the message
     encoded = []
     for x in message.lower():
         if x is 'a':
@@ -273,7 +277,7 @@ def decrypt(message, startpoint):
             final = final + ':'
     return final, startpoint
 
-class getmessage(threading.Thread):
+class getmessage(threading.Thread):  # Thread to get the latest message every second; time can be change to faster or slower
     def __init__(self, id):
         self.id = id
         threading.Thread.__init__(self)
@@ -299,7 +303,7 @@ class getmessage(threading.Thread):
                 print "[Channel] - " + message
                 messagecheck = cryptic
 
-class sendmessage(threading.Thread):
+class sendmessage(threading.Thread):  # Sends messages with a thread, and also sends the join server message
     def __init__(self, id):
         self.username = username
         self.id = id
@@ -318,5 +322,5 @@ class sendmessage(threading.Thread):
             requests.get("http://198.100.155.138:5000/post/" + str(id) + "/" + str(cryptic) + "/" + str(len(message)))
 
 id = abs(int(hash(md5('crypto.pad'))))  # Hashes the Pad to connect to the channel for it on the server
-getmessage(id).start()
-sendmessage(id).start()
+getmessage(id).start()  # Starts the message get thread
+sendmessage(id).start()  # Starts the message send thread
