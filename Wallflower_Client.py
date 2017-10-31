@@ -20,6 +20,8 @@ pad = open("crypto.pad", 'r')  # Loads the one time pad
 pad = pickle.load(pad)
 print('[System] - Loaded...')
 username = str(raw_input("Desired Username: "))
+ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+    "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", ":"]
 
 
 def md5(fname):  # This is used to get a had of the pad
@@ -32,124 +34,19 @@ def md5(fname):  # This is used to get a had of the pad
 
 def encrypt(message, startpoint):  # Encrypts the message
     encoded = []
-    for x in message.lower():
-        if x is 'a':
-            encoded.append(1)
-        if x is 'b':
-            encoded.append(2)
-        if x is 'c':
-            encoded.append(3)
-        if x is 'd':
-            encoded.append(4)
-        if x is 'e':
-            encoded.append(5)
-        if x is 'f':
-            encoded.append(6)
-        if x is 'g':
-            encoded.append(7)
-        if x is 'h':
-            encoded.append(8)
-        if x is 'i':
-            encoded.append(9)
-        if x is 'j':
-            encoded.append(10)
-        if x is 'k':
-            encoded.append(11)
-        if x is 'l':
-            encoded.append(12)
-        if x is 'm':
-            encoded.append(13)
-        if x is 'n':
-            encoded.append(14)
-        if x is 'o':
-            encoded.append(15)
-        if x is 'p':
-            encoded.append(16)
-        if x is 'q':
-            encoded.append(17)
-        if x is 'r':
-            encoded.append(18)
-        if x is 's':
-            encoded.append(19)
-        if x is 't':
-            encoded.append(20)
-        if x is 'u':
-            encoded.append(21)
-        if x is 'v':
-            encoded.append(22)
-        if x is 'w':
-            encoded.append(23)
-        if x is 'x':
-            encoded.append(24)
-        if x is 'y':
-            encoded.append(25)
-        if x is 'z':
-            encoded.append(26)
-        if x is ' ':
-            encoded.append(27)
-        if x is ':':
-            encoded.append(28)
+    # Adds numbers to 'encoded' array based on the letter
+    for char in message.lower(): # Loops through input
+        for alphabetIndex in range(1, len(ALPHABET)): # Loops through alphabet
+            if char is ALPHABET[alphabetIndex - 1]: # Converts that letter to its matching number
+                encoded.append(alphabetIndex)
+                break
 
-    z = 0
+    # z = 0 # This line seems useless but I was scared to delete it
     final = ''
-    for x in encoded:
-        encrypted = (x + pad[startpoint]) % 28
-        if encrypted is 1:
-            final = final + 'a'
-        if encrypted is 2:
-            final = final + 'b'
-        if encrypted is 3:
-            final = final + 'c'
-        if encrypted is 4:
-            final = final + 'd'
-        if encrypted is 5:
-            final = final + 'e'
-        if encrypted is 6:
-            final = final + 'f'
-        if encrypted is 7:
-            final = final + 'g'
-        if encrypted is 8:
-            final = final + 'h'
-        if encrypted is 9:
-            final = final + 'i'
-        if encrypted is 10:
-            final = final + 'j'
-        if encrypted is 11:
-            final = final + 'k'
-        if encrypted is 12:
-            final = final + 'l'
-        if encrypted is 13:
-            final = final + 'm'
-        if encrypted is 14:
-            final = final + 'n'
-        if encrypted is 15:
-            final = final + 'o'
-        if encrypted is 16:
-            final = final + 'p'
-        if encrypted is 17:
-            final = final + 'q'
-        if encrypted is 18:
-            final = final + 'r'
-        if encrypted is 19:
-            final = final + 's'
-        if encrypted is 20:
-            final = final + 't'
-        if encrypted is 21:
-            final = final + 'u'
-        if encrypted is 22:
-            final = final + 'v'
-        if encrypted is 23:
-            final = final + 'w'
-        if encrypted is 24:
-            final = final + 'x'
-        if encrypted is 25:
-            final = final + 'y'
-        if encrypted is 26:
-            final = final + 'z'
-        if encrypted is 27:
-            final = final + ' '
-        if encrypted is 0:
-            final = final + ':'
+    for num in encoded: # Loops through each number
+        encrypted = (x + pad[startpoint]) % 28 # Pad cipher
+        final = final + ALPHABET[num - 1] # Gets corresponding letter
+
         startpoint = startpoint + 1
 
     return final, startpoint
