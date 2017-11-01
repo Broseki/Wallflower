@@ -16,3 +16,9 @@ software in the same directory as the crypto.pad file generated using PadGen.py.
 You will need to change the IP address in the client to match your server address.
 
 You will be dropped into a room unique to your one-time pad.
+
+# PLEASE NOTE
+This was written when I was is high school. I would make a ton of changes if I was working on this now (I may fix it soon).
+For one, I would create a server that pushes updates to clients instead of clients pulling updates. I would also use a
+combination of a ont-time pad and a bitwise XOR cipher as this would allow any type of data to be passed through, rather than
+just text. This system is secure, it just has a not-so-good design in terms of server software, and data encoding.
